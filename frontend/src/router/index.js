@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
   routes: [
     {
       path: '/',
@@ -26,8 +27,40 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/Login.vue'),
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/Dashboard.vue'),
+      meta: {
+        requiresAuth: true
+      },
+    },
+    {
+      path: '/courses',
+      name: 'courses',
+      component: () => import('../views/Courses.vue'),
+
     }
   ],
+
+  // scroll to top on route change
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
+
+  // route guard
+  beforeEnter(to, from, next) {
+    if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+      next({ name: 'login' })
+    } else {
+      next()
+    }
+  }
 })
 
 export default router
