@@ -1,1 +1,13 @@
-/backend/.env
+# Ignore all env files
+**/.env
+
+# Node modules
+**/node_modules
+
+# Logs
+**/logs
+**/*.log
+
+# Dist / build
+frontend/dist
+backend/dist
