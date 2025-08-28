@@ -1,26 +1,28 @@
-import express from "express";
-import Course from "../models/Course.js";
+const express = require("express");
+const Course = require("../models/Course");
 
 const router = express.Router();
 
-// Add new course (Admin only)
+// Add course
 router.post("/add-course", async (req, res) => {
+  const { title, description, fee, duration } = req.body;
   try {
-    const { title, description, fee, duration } = req.body;
-
     const newCourse = new Course({ title, description, fee, duration });
     await newCourse.save();
-
     res.json({ msg: "Course added successfully", course: newCourse });
   } catch (err) {
     res.status(500).json({ msg: "Error adding course", error: err.message });
   }
 });
 
-// Get all courses (Admin view)
+// Get all courses
 router.get("/all-courses", async (req, res) => {
-  const courses = await Course.find();
-  res.json(courses);
+  try {
+    const courses = await Course.find();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ msg: "Error fetching courses", error: err.message });
+  }
 });
 
-export default router;
+module.exports = router;

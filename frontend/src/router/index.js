@@ -13,9 +13,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
     {
@@ -40,32 +37,40 @@ const router = createRouter({
       path: '/courses',
       name: 'courses',
       component: () => import('../views/Courses.vue'),
-
     },
     {
       path: '/admin',
-      name: 'course',
+      name: 'admin',
       component: () => import('../views/AdminDashboard.vue'),
-
+      // meta: {
+      //   requiresAuth: true,
+      //   isAdmin: true
+      // }
     }
   ],
 
-  // scroll to top on route change
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {
       return { top: 0 }
     }
-  },
+  }
+})
 
-  // route guard
-  beforeEnter(to, from, next) {
-    if (to.meta.requiresAuth && !localStorage.getItem('token')) {
-      next({ name: 'login' })
-    } else {
-      next()
-    }
+// ✅ Global Navigation Guard
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const userRole = localStorage.getItem('role') // ধরো role: 'admin' বা 'student'
+
+  if (to.meta.requiresAuth && !token) {
+    next({ name: 'login' })
+  } 
+  else if (to.meta.isAdmin && userRole !== 'admin') {
+    next({ name: 'home' }) // non-admin কে home পাঠানো হবে
+  } 
+  else {
+    next()
   }
 })
 
