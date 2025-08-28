@@ -100,6 +100,7 @@ const fetchStudents = async () => {
 const saveCourse = async () => {
   try {
     if(editCourseId.value){
+      // Update course
       await axios.put(`http://localhost:5000/api/admin/update-course/${editCourseId.value}`, {
         title: title.value,
         description: description.value,
