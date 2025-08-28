@@ -41,6 +41,12 @@ const router = createRouter({
       name: 'courses',
       component: () => import('../views/Courses.vue'),
 
+    },
+    {
+      path: '/admin',
+      name: 'course',
+      component: () => import('../views/AdminDashboard.vue'),
+
     }
   ],
 

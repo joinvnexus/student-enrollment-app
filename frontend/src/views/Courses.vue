@@ -27,6 +27,7 @@
     onMounted(async () => {
         const res = await axios.get("http://localhost:5000/api/courses");
         courses.value = res.data;
+        // console.log(courses.value)
     });
 
     const enroll = async (courseId) => {
